@@ -1,18 +1,24 @@
+import { auth } from "@/auth";
+import CommentsSheet from "@/components/comments/commentsSheet";
+import LikeButton from "@/components/likeButton";
 import PostContent from "@/components/postContent";
+import PostDropdown from "@/components/PostDropdown";
+import { getIslikedPost } from "@/lib/acthion";
 import { fetchSinglePost } from "@/lib/data";
 import { toReadableDate } from "@/lib/formatTime";
-import Link from "next/link";
 import React, { Suspense } from "react";
- 
 
 export async function generateStaticParams() {
   return [];
 }
 
 export default async function story({ params }: { params: { id: string } }) {
+  const session = await auth();
+  const currentUserId = session?.user.id;
   let post = await fetchSinglePost(params.id);
   const date = toReadableDate(post?.created);
- 
+  const Islikedpost = await getIslikedPost(post?.id as string);
+
   return (
     <div className="mx-auto h-dvh  pt-12 font-marat-sans sm:max-w-2xl">
       <div className="pb-12">
@@ -29,23 +35,28 @@ export default async function story({ params }: { params: { id: string } }) {
             <p className="text-sm text-gray-500">Published in . {date}</p>
           </div>
         </div>
-        <div className="flex justify-between mt-12  gap-6 border-y border-slate-100 py-4">
-          <div className="flex gap-6 ">
-            <span>👋 4k</span>
-            <span>🗨️ 4k</span>
+        <div className="flex justify-between mt-6 items-center  gap-6 border-y border-slate-100 py-2">
+          <div className="flex gap-6 items-center ">
+            {
+              <LikeButton
+                post={post as post}
+                isliked={Islikedpost as boolean}
+              />
+            }
+
+            <CommentsSheet postId={post?.id} />
           </div>
-          <Link href={`/story/${post?.id}/edit`}>edit</Link>
+          {currentUserId == post?.user.id && <PostDropdown postId={post?.id} />}
         </div>
       </div>
-      <Suspense fallback={<div>Loading...</div>}>
-          {<PostContent postContent={post?.content}/>}
-        </Suspense>
-      <div className="flex justify-between mt-12">
+      {post?.content}
+
+      <div className="flex justify-between mt-12 items-center">
         <div className="flex gap-6 ">
-          <span>👋 4k</span>
-          <span>🗨️ 4k</span>
-        </div>
-        <Link href={`/story/${post?.id}/edit`}>edit</Link>
+          {<LikeButton post={post as post} isliked={Islikedpost as boolean} />}
+          <CommentsSheet postId={post?.id} />
+          </div>
+        {currentUserId == post?.user.id && <PostDropdown postId={post?.id} />}
       </div>
     </div>
   );

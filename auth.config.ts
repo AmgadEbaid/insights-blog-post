@@ -10,10 +10,6 @@ export const authConfig = {
 
       const isLoggedIn = !!auth?.user;
 
-      console.log("inside auth")
-      console.log(auth)
-      console.log(isLoggedIn)
-
       const isOnHome = nextUrl.pathname.startsWith('/story/new');
       if (isOnHome) {
         if (isLoggedIn) return true;
@@ -22,7 +18,6 @@ export const authConfig = {
         return Response.redirect(new URL('/', nextUrl));
       }
       if (nextUrl.searchParams.has('callbackUrl') && isLoggedIn) {
-        console.log("redirecting callback   ")
        let callbackUrl_ =  nextUrl.searchParams.get('callbackUrl')
        console.log(callbackUrl_)
         const callbackUrl = new URL(callbackUrl_ || '/' , nextUrl);

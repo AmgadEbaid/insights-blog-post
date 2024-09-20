@@ -29,16 +29,16 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
             return null;
           }
           const user:user = await res.json();
-          console.log(user);
+      
           return {
             name: user.User.username,
             email: user.User.email,
             token: user.access_token,
             Refresh_Token: user.refresh_token,
             expireIn: user.expiresIn,
+            id:user.User.id
           } as User;
         }
-        console.log("Invalid credentials");
         return null;
       },
     }),

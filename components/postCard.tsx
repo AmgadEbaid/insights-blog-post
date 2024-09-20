@@ -1,7 +1,8 @@
 import { FormatTime } from "@/lib/formatTime";
 import Image from "next/image";
-import React from "react";
+import React, { Suspense } from "react";
 import Link from "next/link";
+import CommentCount from "./comments/commentCount";
 
 export function PostCard({ post }: { post: post }) {
   const dateObject = new Date(post.created);
@@ -17,11 +18,10 @@ export function PostCard({ post }: { post: post }) {
                 alt=""
                 className="w-5 rounded-full"
               />
-              
+
               <h1 className="text-sm text-black font-normal hover:underline  hover:underline-offset-1">
                 {post.user.diplayname}
               </h1>
-            
             </div>
             <div className="flex flex-row">
               <div className="w-3/4">
@@ -54,9 +54,12 @@ export function PostCard({ post }: { post: post }) {
                     {post.favoriteCount}{" "}
                   </span>
                 </span>
-                <span>
-                  🗨️<span className="text-sm font-normal">5</span>
-                </span>
+                <div>
+                  🗨️
+                  <Suspense fallback={<div>...</div>}>
+                    {<CommentCount postId={post.id} />}
+                  </Suspense>
+                </div>
               </div>
             </div>
           </div>

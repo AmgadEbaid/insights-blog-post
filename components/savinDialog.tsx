@@ -14,9 +14,15 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CreatePost, handelpuplish } from "@/lib/acthion";
 
+function puplish(name :string) {
+    console.log(name)
+    console.log('puplish')
+}
+
+const paramfunc = puplish.bind(null, 'puplish');
 export default function SavinDialog({post}:{post:CreatePost_Type}) {
     const initialState = { message: null, errors: {} };
-    const [state, formAction,isPending] = useActionState(CreatePost, initialState);
+    const [state, formAction,isPending] = useActionState(paramfunc,null);
    
     
   return (

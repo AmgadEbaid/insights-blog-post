@@ -1,15 +1,14 @@
 "use client";
 import { CreatePost, updatedPost } from "@/lib/acthion";
 import { useActionState } from "react";
+import { string } from "zod";
 
 // this registers <Editor> as a Client Component
 
-export default async function Editor({
-  initialContent_,
-}: {
-  initialContent_?: singlePost;
-}) {
-  const [state, action, isPending] = useActionState(CreatePost, null);
+export default async function EditeEditor({ post }: { post?: singlePost }) {
+  const updatepostWithId = updatedPost.bind(null, post?.id as string);
+
+  const [state, action, isPending] = useActionState(updatepostWithId, null);
 
   return (
     <div>
@@ -22,7 +21,7 @@ export default async function Editor({
           id="title"
           placeholder="title"
           required
-          defaultValue={initialContent_?.titile}
+          defaultValue={post?.titile}
         />
         <label htmlFor="title">description</label>
         <input
@@ -31,22 +30,22 @@ export default async function Editor({
           name="description"
           id="description"
           placeholder="description"
-          defaultValue={initialContent_?.description}
+          defaultValue={post?.description}
         />
         <label htmlFor="content">content</label>
         <textarea
-          rows={12}
+         rows={12}
           name="content"
           id="content"
           placeholder="content"
           className="w-full bg-gray-50 p-2 rounded-lg outline-none"
-          defaultValue={initialContent_?.content}
+          defaultValue={post?.content}
         ></textarea>
         <button
           type="submit"
-          className="bg-green-700 rounded-full text-white text-sm px-2"
+          className="bg-green-700 rounded-full text-white px-2 text-base"
         >
-          puplish
+          save and puplish
         </button>
       </form>
     </div>
