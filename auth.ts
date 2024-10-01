@@ -26,8 +26,10 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
           const { email, password } = parsedCredentials.data;
 
           const user = await localAuth(email, password);
-            
-          return user;
+          if(user)
+            return user
+
+          return null;
         }
       },
     }),
