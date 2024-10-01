@@ -86,8 +86,7 @@ export async function getCommentCount(postId:String){
     }
 
     const json = await response.json();
-    console.log("inside getcomment count")
-    console.log(json)
+
     return json as number;
   } catch (error) {
     console.error(error);

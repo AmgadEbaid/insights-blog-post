@@ -6,6 +6,7 @@ import PostDropdown from "@/components/PostDropdown";
 import { getIslikedPost } from "@/lib/acthion";
 import { fetchSinglePost } from "@/lib/data";
 import { toReadableDate } from "@/lib/formatTime";
+import { notFound } from "next/navigation";
 import React, { Suspense } from "react";
 
 export async function generateStaticParams() {
@@ -16,26 +17,29 @@ export default async function story({ params }: { params: { id: string } }) {
   const session = await auth();
   const currentUserId = session?.user.id;
   let post = await fetchSinglePost(params.id);
+  console.log(post);
   const date = toReadableDate(post?.created);
   const Islikedpost = await getIslikedPost(post?.id as string);
-
+  if (!post) {
+    return notFound();
+  }
   return (
-    <div className="mx-auto h-dvh  pt-12 font-marat-sans sm:max-w-2xl">
+    <div className="mx-auto h-dvh px-6  font-marat-sans sm:max-w-2xl">
       <div className="pb-12">
-        <h1 className="mb-2 text-4xl font-extrabold">{post?.titile}</h1>
-        <p className="text-2xl text-gray-600">{post?.description}</p>
-        <div className="my-8 flex gap-2">
-          <img
-            src="https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/7b/88/96/7b889674-041c-2151-e50c-571527712dba/pr_source.png/380x380cc.webp"
-            alt=""
-            className="w-12 rounded-full"
-          />
+        <h1 className="mb-4 md:text-5xl text-3xl text-[#242424]  font-extrabold">
+          {post?.titile}
+        </h1>
+        <p className="md:text-xl text-base text-[#6B6B6B]">
+          {post?.description}
+        </p>
+        <div className="my-6 flex gap-2">
+          <img src={post?.user.image} alt="" className="w-12 rounded-full" />
           <div className="ml-2">
             <h1 className="text-sm text-black ">{post?.user.diplayname}</h1>
-            <p className="text-sm text-gray-500">Published in . {date}</p>
+            <p className="text-sm text-[#6B6B6B]">Published in . {date}</p>
           </div>
         </div>
-        <div className="flex justify-between mt-6 items-center  gap-6 border-y border-slate-100 py-2">
+        <div className="flex justify-between mt-6 items-center  gap-6 border-y border-[#f5f5f5] py-6">
           <div className="flex gap-6 items-center ">
             {
               <LikeButton
@@ -55,7 +59,7 @@ export default async function story({ params }: { params: { id: string } }) {
         <div className="flex gap-6 ">
           {<LikeButton post={post as post} isliked={Islikedpost as boolean} />}
           <CommentsSheet postId={post?.id} />
-          </div>
+        </div>
         {currentUserId == post?.user.id && <PostDropdown postId={post?.id} />}
       </div>
     </div>

@@ -4,8 +4,7 @@ import SingleComment from "./SingleComment";
 
 export default async function Comments({ postId }: { postId?: string }) {
   const comments: comment[] | undefined = await fetchPostComments(postId);
-  console.log("inside comments")
-  console.log(comments)
+
 
   return (
     <div>

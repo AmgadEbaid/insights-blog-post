@@ -2,6 +2,8 @@ interface User {
   id: string;
   diplayname: string;
   email: string;
+  image: string;
+  IsAdmin: boolean;
 }
 
 interface post {
@@ -36,7 +38,7 @@ interface comment {
   id: string;
   body: string;
   userId: string;
-  articleId:string;
+  articleId: string;
   created: string;
   updated: string;
   deleted: null;
@@ -46,4 +48,13 @@ interface comment {
     email: string;
     IsAdmin: boolean;
   };
+}
+interface OauthUser {
+  diplayname: string;
+
+  email?: string;
+
+  image?: string;
+
+  provider: string;
 }

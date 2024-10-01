@@ -3,8 +3,24 @@
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-export async function increment(previousState: any, formData: any) {
-  console.log(" hello from form");
+export async function oauthLogin(oauthUser:OauthUser) {
+ 
+  const url = `http://localhost:8000/auth/oauth/Login`;
+   const jsonOauthUser = JSON.stringify(oauthUser)
+  
+  try {
+    const user = await fetch(url, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body:jsonOauthUser,
+    });
+    return await user.json() 
+    
+  } catch (error) {
+    console.error(error);
+  }
 }
 export async function CreatePost(previousState: any, formData: FormData) {
   const session = await auth();
@@ -194,6 +210,7 @@ export async function getIslikedPost(PostId: string) {
     console.error(error);
   }
 }
+
 
 
 

@@ -1,6 +1,7 @@
 "use client";
 import { CreatePost, updatedPost } from "@/lib/acthion";
 import { useActionState } from "react";
+import { Button } from "./ui/button";
 
 // this registers <Editor> as a Client Component
 
@@ -14,6 +15,17 @@ export default async function Editor({
   return (
     <div>
       <form action={action}>
+
+        <div className="flex justify-end">
+        <Button
+           disabled={isPending}
+          type="submit"
+          className="bg-green-700 rounded-full text-white text-sm px-4 hover:bg-green-600 "
+        >
+          puplish
+        </Button>
+        </div>
+      
         <label htmlFor="title"> title</label>
         <input
           className="w-full bg-gray-50 p-2 rounded-lg outline-none"
@@ -42,12 +54,7 @@ export default async function Editor({
           className="w-full bg-gray-50 p-2 rounded-lg outline-none"
           defaultValue={initialContent_?.content}
         ></textarea>
-        <button
-          type="submit"
-          className="bg-green-700 rounded-full text-white text-sm px-2"
-        >
-          puplish
-        </button>
+       
       </form>
     </div>
   );
